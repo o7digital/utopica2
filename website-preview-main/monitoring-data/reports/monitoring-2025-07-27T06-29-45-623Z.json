@@ -1,0 +1,61 @@
+{
+  "timestamp": "2025-07-27T06:29:43.376Z",
+  "environment": "development",
+  "duration": 2247,
+  "urls": {
+    "Homepage": {
+      "error": "lighthouse is not a function",
+      "url": "https://utopica.website",
+      "priority": "P0"
+    },
+    "Sprint Landing": {
+      "error": "lighthouse is not a function",
+      "url": "https://utopica.website/sprint-claridad-comercial",
+      "priority": "P0"
+    },
+    "Team Page": {
+      "error": "lighthouse is not a function",
+      "url": "https://utopica.website/equipo",
+      "priority": "P1"
+    },
+    "Workshops API": {
+      "error": "lighthouse is not a function",
+      "url": "https://utopica.website/api/workshops",
+      "priority": "P2"
+    }
+  },
+  "summary": {
+    "error": "No valid results"
+  },
+  "alerts": [
+    {
+      "level": "critical",
+      "type": "monitoring_error",
+      "url": "Homepage",
+      "message": "Failed to monitor Homepage: lighthouse is not a function",
+      "timestamp": "2025-07-27T06:29:43.939Z"
+    },
+    {
+      "level": "critical",
+      "type": "monitoring_error",
+      "url": "Sprint Landing",
+      "message": "Failed to monitor Sprint Landing: lighthouse is not a function",
+      "timestamp": "2025-07-27T06:29:44.510Z"
+    },
+    {
+      "level": "critical",
+      "type": "monitoring_error",
+      "url": "Team Page",
+      "message": "Failed to monitor Team Page: lighthouse is not a function",
+      "timestamp": "2025-07-27T06:29:45.070Z"
+    },
+    {
+      "level": "critical",
+      "type": "monitoring_error",
+      "url": "Workshops API",
+      "message": "Failed to monitor Workshops API: lighthouse is not a function",
+      "timestamp": "2025-07-27T06:29:45.623Z"
+    }
+  ],
+  "recommendations": []
+}

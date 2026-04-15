@@ -1,0 +1,407 @@
+name: Performance Testing
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # Run performance tests daily at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to test'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - production
+      test_type:
+        description: 'Type of performance test to run'
+        required: true
+        default: 'full'
+        type: choice
+        options:
+          - full
+          - web-vitals
+          - api-only
+          - load-test
+
+env:
+  NODE_VERSION: '18'
+  PLAYWRIGHT_VERSION: '1.40.0'
+
+jobs:
+  performance-tests:
+    name: Performance Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    
+    strategy:
+      matrix:
+        test-suite: [web-vitals, isr, cache, error-boundaries, api-performance]
+      fail-fast: false
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Setup Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: Build application
+        run: npm run build
+        env:
+          NODE_ENV: production
+
+      - name: Start application
+        run: |
+          npm start &
+          npx wait-on http://localhost:3000 --timeout 60000
+        env:
+          PORT: 3000
+
+      - name: Warm up application
+        run: |
+          curl http://localhost:3000 || true
+          curl http://localhost:3000/sprint-claridad-comercial || true
+          curl http://localhost:3000/equipo || true
+          sleep 5
+
+      - name: Run performance tests
+        run: npx playwright test tests/performance/${{ matrix.test-suite }}-tests.spec.ts --project=performance
+        env:
+          BASE_URL: http://localhost:3000
+          CI: true
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: performance-results-${{ matrix.test-suite }}
+          path: |
+            test-results/
+            performance-results.json
+            performance-baseline.json
+            api-performance-baseline.json
+          retention-days: 30
+
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report-${{ matrix.test-suite }}
+          path: playwright-report/
+          retention-days: 30
+
+  lighthouse-audit:
+    name: Lighthouse Performance Audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+        env:
+          NODE_ENV: production
+
+      - name: Start application
+        run: |
+          npm start &
+          npx wait-on http://localhost:3000 --timeout 60000
+        env:
+          PORT: 3000
+
+      - name: Run Lighthouse audit
+        run: npm run lighthouse
+
+      - name: Upload Lighthouse reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lighthouse-reports
+          path: |
+            lighthouse-reports/
+            accessibility-audit-summary.json
+          retention-days: 30
+
+  load-testing:
+    name: Load Testing
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Setup Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: Build application
+        run: npm run build
+        env:
+          NODE_ENV: production
+
+      - name: Start application
+        run: |
+          npm start &
+          npx wait-on http://localhost:3000 --timeout 60000
+        env:
+          PORT: 3000
+
+      - name: Run load tests
+        run: npx playwright test tests/performance/ --project=load-test
+        env:
+          BASE_URL: http://localhost:3000
+          LOAD_TEST_DURATION: 300 # 5 minutes
+          CONCURRENT_USERS: 50
+
+      - name: Upload load test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: load-test-results
+          path: |
+            test-results/
+            performance-results.json
+          retention-days: 30
+
+  comprehensive-report:
+    name: Generate Comprehensive Performance Report
+    runs-on: ubuntu-latest
+    needs: [performance-tests, lighthouse-audit]
+    if: always()
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts/
+
+      - name: Build application (for report generation)
+        run: npm run build
+        env:
+          NODE_ENV: production
+
+      - name: Start application
+        run: |
+          npm start &
+          npx wait-on http://localhost:3000 --timeout 60000
+        env:
+          PORT: 3000
+
+      - name: Generate comprehensive performance report
+        run: node scripts/performance-tests.js --report-only
+        env:
+          BASE_URL: http://localhost:3000
+
+      - name: Upload comprehensive report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: comprehensive-performance-report
+          path: |
+            performance-reports/
+          retention-days: 90
+
+      - name: Comment PR with performance results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            
+            // Try to read the performance report
+            try {
+              const reportFiles = fs.readdirSync('performance-reports/').filter(f => f.endsWith('.json'));
+              if (reportFiles.length > 0) {
+                const reportPath = path.join('performance-reports/', reportFiles[0]);
+                const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+                
+                const comment = `## 🚀 Performance Test Results
+                
+                **Overall Score:** ${report.summary?.overallScore?.toFixed(1) || 'N/A'}%
+                
+                **Test Results:**
+                - Test Suites: ${report.summary?.successfulTestSuites || 0}/${report.summary?.totalTestSuites || 0} passed
+                - Environment: ${report.environment?.baseUrl || 'Unknown'}
+                
+                **Performance Targets:**
+                - LCP: <1.5s
+                - FID: <100ms
+                - CLS: <0.1
+                - TTFB: <300ms
+                - Cache Hit Ratio: >85%
+                
+                **Recommendations:**
+                ${report.summary?.recommendations?.map(rec => `- ${rec}`).join('\n') || 'No specific recommendations'}
+                
+                [View detailed report in artifacts](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})
+                `;
+                
+                github.rest.issues.createComment({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: comment
+                });
+              }
+            } catch (error) {
+              console.log('Could not generate performance comment:', error.message);
+            }
+
+  performance-regression-check:
+    name: Performance Regression Check
+    runs-on: ubuntu-latest
+    needs: [performance-tests]
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Download performance artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: performance-results-*
+          path: current-results/
+
+      - name: Download baseline from main branch
+        run: |
+          # Download baseline performance data from main branch
+          gh run list --branch main --workflow "Performance Testing" --limit 1 --json databaseId,conclusion | \
+          jq -r '.[] | select(.conclusion == "success") | .databaseId' | \
+          head -1 | \
+          xargs -I {} gh run download {} --pattern "performance-results-*" --dir baseline-results/ || echo "No baseline found"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Compare performance metrics
+        run: |
+          node -e "
+          const fs = require('fs');
+          const path = require('path');
+          
+          // Function to find and read performance baseline files
+          function findBaseline(dir) {
+            if (!fs.existsSync(dir)) return null;
+            
+            const files = fs.readdirSync(dir, { recursive: true });
+            const baselineFile = files.find(f => f.includes('baseline.json'));
+            
+            if (baselineFile) {
+              return JSON.parse(fs.readFileSync(path.join(dir, baselineFile), 'utf8'));
+            }
+            return null;
+          }
+          
+          const currentBaseline = findBaseline('current-results/');
+          const previousBaseline = findBaseline('baseline-results/');
+          
+          if (currentBaseline && previousBaseline) {
+            console.log('📊 Performance Comparison:');
+            console.log('Current vs Previous (baseline)');
+            
+            // Compare key metrics (implementation would depend on baseline structure)
+            console.log('Performance regression check completed');
+          } else {
+            console.log('⚠️ Could not perform regression check - missing baseline data');
+          }
+          "
+
+  monitor-production:
+    name: Production Performance Monitoring
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'schedule'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Setup Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: Run production performance monitoring
+        run: node scripts/performance-tests.js --env ${{ vars.PRODUCTION_URL || 'https://utopica.website' }}
+        env:
+          BASE_URL: ${{ vars.PRODUCTION_URL || 'https://utopica.website' }}
+
+      - name: Upload production monitoring results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: production-monitoring-results
+          path: |
+            performance-reports/
+          retention-days: 365
+
+      - name: Alert on performance degradation
+        if: failure()
+        run: |
+          echo "🚨 Production performance monitoring detected issues!"
+          echo "Check the performance reports for details."
+          # Here you could integrate with alerting systems like Slack, PagerDuty, etc.

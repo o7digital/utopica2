@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Sitemap: https://utopica.net/sitemap.xml
+Sitemap: https://utopica.net/sitemap-en.xml

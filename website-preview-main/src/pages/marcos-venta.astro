@@ -1,0 +1,31 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { MarcosNav } from '@/components/marcos-venta/marcos-nav';
+import { HubHero } from '@/components/marcos-venta/hub-hero';
+import { HubIndex } from '@/components/marcos-venta/hub-index';
+import { HubThesis } from '@/components/marcos-venta/hub-thesis';
+import { HubColophon } from '@/components/marcos-venta/hub-colophon';
+import { BreadcrumbListSchema } from '@/components/schema-org';
+
+const title = 'Marcos de Venta Consultiva | Biblioteca B2B — Utópica';
+const description =
+  'Cinco maneras de vender lo que no se puede tocar. Biblioteca curada de las metodologías más influyentes en venta consultiva B2B: Blair Enns, April Dunford, Keenan, Dixon & Adamson, Neil Rackham.';
+
+const breadcrumbItems = [
+  { name: 'Inicio', item: 'https://utopica.net/' },
+  { name: 'Marcos de Venta', item: 'https://utopica.net/marcos-venta' },
+];
+
+const pathname = Astro.url.pathname;
+---
+
+<Layout title={title} description={description}>
+  <BreadcrumbListSchema items={breadcrumbItems} client:only="react" />
+
+  <MarcosNav client:load pathname={pathname} />
+
+  <HubHero client:load />
+  <HubIndex />
+  <HubThesis />
+  <HubColophon />
+</Layout>

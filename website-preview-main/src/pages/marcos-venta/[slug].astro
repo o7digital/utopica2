@@ -1,0 +1,56 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { MarcosNav } from '@/components/marcos-venta/marcos-nav';
+import { FrameworkHero } from '@/components/marcos-venta/framework-hero';
+import { FrameworkNav } from '@/components/marcos-venta/framework-nav';
+import { Conversaciones4Content } from '@/components/marcos-venta/content/conversaciones-4';
+import { SalesPitchContent } from '@/components/marcos-venta/content/sales-pitch';
+import { GapSellingContent } from '@/components/marcos-venta/content/gap-selling';
+import { ChallengerContent } from '@/components/marcos-venta/content/challenger-sale';
+import { SpinContent } from '@/components/marcos-venta/content/spin-selling';
+import { frameworks, getFrameworkBySlug } from '@/components/marcos-venta/data';
+import { BreadcrumbListSchema } from '@/components/schema-org';
+
+export async function getStaticPaths() {
+  return frameworks.map((f) => ({
+    params: { slug: f.slug },
+    props: { framework: f },
+  }));
+}
+
+const { slug } = Astro.params;
+const { framework } = Astro.props;
+
+const f = framework ?? getFrameworkBySlug(slug as string);
+if (!f) {
+  return Astro.redirect('/marcos-venta');
+}
+
+const title = `${f.shortTitle} · ${f.author}, ${f.year} | Marcos de Venta — Utópica`;
+const description = f.description;
+
+const breadcrumbItems = [
+  { name: 'Inicio', item: 'https://utopica.net/' },
+  { name: 'Marcos de Venta', item: 'https://utopica.net/marcos-venta' },
+  { name: f.shortTitle, item: `https://utopica.net/marcos-venta/${f.slug}` },
+];
+
+const pathname = Astro.url.pathname;
+---
+
+<Layout title={title} description={description}>
+  <BreadcrumbListSchema items={breadcrumbItems} client:only="react" />
+
+  <MarcosNav client:load pathname={pathname} />
+
+  <FrameworkHero client:load f={f} />
+
+  <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-10 py-12 md:py-20">
+    {slug === '4-conversaciones' && <Conversaciones4Content client:load />}
+    {slug === 'sales-pitch' && <SalesPitchContent client:load />}
+    {slug === 'gap-selling' && <GapSellingContent client:load />}
+    {slug === 'challenger-sale' && <ChallengerContent client:load />}
+    {slug === 'spin-selling' && <SpinContent client:load />}
+    <FrameworkNav slug={f.slug} />
+  </article>
+</Layout>

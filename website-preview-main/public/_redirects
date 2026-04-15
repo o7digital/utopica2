@@ -1,0 +1,30 @@
+# ===== www → apex =====
+https://www.utopica.net/* https://utopica.net/:splat 301!
+
+# ===== Old domains =====
+https://utopica.io/* https://utopica.net/:splat 301!
+https://www.utopica.io/* https://utopica.net/:splat 301!
+
+# ===== Productos renombrados (301 permanentes) =====
+# Sprint de Claridad Comercial → Venta consultiva (keyword buscable, marca preservada)
+/sprint-claridad-comercial      /servicios/venta-consultiva   301
+/sprint                         /servicios/venta-consultiva   301
+
+# Reuniones Bajo Demanda → Prospección
+/reuniones-bajo-demanda         /servicios/prospeccion         301
+/reuniones                      /servicios/prospeccion         301
+
+# Equipo Comercial Aumentado → Coaching IA
+/equipo-comercial-aumentado     /servicios/coaching-ia         301
+
+# Versiones en inglés (dejan las páginas existentes, por si hay tráfico)
+# Se pueden migrar en una siguiente fase
+
+# ===== Rutas muertas a 404 =====
+/demo              /404    404
+/diagnostico       /404    404
+/fabrica-leads     /404    404
+/script            /404    404
+/scripts           /404    404
+
+# Nota: se removió `/servicios /404 404` porque ahora /servicios/[slug] es ruta válida

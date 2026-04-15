@@ -1,0 +1,39 @@
+{
+  "created": "2025-07-27T06:29:43.375Z",
+  "version": "1.0.0",
+  "targets": {
+    "lcp": 1500,
+    "fid": 100,
+    "cls": 0.1,
+    "ttfb": 300,
+    "performance": 90
+  },
+  "monitoring_thresholds": {
+    "performance": {
+      "critical": 85,
+      "warning": 90,
+      "target": 95
+    },
+    "lcp": {
+      "critical": 2500,
+      "warning": 2000,
+      "target": 1500
+    },
+    "cls": {
+      "critical": 0.25,
+      "warning": 0.15,
+      "target": 0.1
+    },
+    "fcp": {
+      "critical": 2000,
+      "warning": 1500,
+      "target": 1200
+    },
+    "accessibility": {
+      "critical": 90,
+      "warning": 95,
+      "target": 98
+    }
+  },
+  "last_updated": "2025-07-27T06:29:43.376Z"
+}

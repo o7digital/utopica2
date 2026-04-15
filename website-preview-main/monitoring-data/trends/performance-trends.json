@@ -1,0 +1,81 @@
+{
+  "data": [
+    {
+      "timestamp": "2025-07-27T06:29:43.376Z",
+      "environment": "development",
+      "summary": {
+        "error": "No valid results"
+      },
+      "alertCount": 4
+    },
+    {
+      "timestamp": "2025-07-27T06:30:18.277Z",
+      "environment": "development",
+      "summary": {
+        "totalUrls": 4,
+        "successfulUrls": 4,
+        "failedUrls": 0,
+        "averageScores": {
+          "performance": 0,
+          "accessibility": 0,
+          "bestPractices": 0,
+          "seo": 0
+        },
+        "averageMetrics": {
+          "lcp": 0,
+          "fcp": 0,
+          "cls": 0,
+          "si": 0,
+          "tbt": 0
+        },
+        "healthStatus": {
+          "status": "warning",
+          "percentage": 50,
+          "checks": {
+            "performance": false,
+            "lcp": true,
+            "cls": true,
+            "accessibility": false
+          },
+          "summary": "2/4 health checks passing"
+        }
+      },
+      "alertCount": 8
+    },
+    {
+      "timestamp": "2025-07-27T06:31:20.424Z",
+      "environment": "development",
+      "summary": {
+        "totalUrls": 4,
+        "successfulUrls": 4,
+        "failedUrls": 0,
+        "averageScores": {
+          "performance": 0,
+          "accessibility": 0,
+          "bestPractices": 0,
+          "seo": 0
+        },
+        "averageMetrics": {
+          "lcp": 0,
+          "fcp": 0,
+          "cls": 0,
+          "si": 0,
+          "tbt": 0
+        },
+        "healthStatus": {
+          "status": "warning",
+          "percentage": 50,
+          "checks": {
+            "performance": false,
+            "lcp": true,
+            "cls": true,
+            "accessibility": false
+          },
+          "summary": "2/4 health checks passing"
+        }
+      },
+      "alertCount": 8
+    }
+  ],
+  "trends": null
+}

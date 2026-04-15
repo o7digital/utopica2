@@ -1,0 +1,20 @@
+{
+  "environment": "development",
+  "monitoring_enabled": true,
+  "alert_thresholds": {
+    "performance": {
+      "critical": 70,
+      "warning": 85
+    },
+    "lcp": {
+      "critical": 2500,
+      "warning": 2000
+    },
+    "cls": {
+      "critical": 0.25,
+      "warning": 0.15
+    }
+  },
+  "retention_days": 30,
+  "created": "2025-07-27T06:28:58.154Z"
+}

@@ -1,0 +1,30 @@
+[
+  {
+    "level": "critical",
+    "type": "monitoring_error",
+    "url": "Homepage",
+    "message": "Failed to monitor Homepage: lighthouse is not a function",
+    "timestamp": "2025-07-27T06:29:43.939Z"
+  },
+  {
+    "level": "critical",
+    "type": "monitoring_error",
+    "url": "Sprint Landing",
+    "message": "Failed to monitor Sprint Landing: lighthouse is not a function",
+    "timestamp": "2025-07-27T06:29:44.510Z"
+  },
+  {
+    "level": "critical",
+    "type": "monitoring_error",
+    "url": "Team Page",
+    "message": "Failed to monitor Team Page: lighthouse is not a function",
+    "timestamp": "2025-07-27T06:29:45.070Z"
+  },
+  {
+    "level": "critical",
+    "type": "monitoring_error",
+    "url": "Workshops API",
+    "message": "Failed to monitor Workshops API: lighthouse is not a function",
+    "timestamp": "2025-07-27T06:29:45.623Z"
+  }
+]

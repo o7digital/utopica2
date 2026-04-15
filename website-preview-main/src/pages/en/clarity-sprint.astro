@@ -1,0 +1,55 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { BreadcrumbListSchema } from '@/components/schema-org';
+import { SprintServiceSchema, FAQSchemaExtended } from '@/components/schema/service-schema';
+import { ScrollProgress } from '@/components/ui/scroll-progress';
+import {
+  SprintHero,
+  SprintProblemStatic,
+  SprintProblemDeep,
+  SprintWhyNow,
+  SprintFailedSolutions,
+  SprintSuccessCriteria,
+  SprintComparisonStatic,
+  SprintProcess,
+  SprintBonuses,
+  SprintOffer,
+  SprintCTA,
+  SprintFAQ,
+} from '@/components/sprint';
+
+const title = 'Commercial Clarity Sprint | 9 Tools in 4 Weeks - Utópica';
+const description = 'Get a clear message and 9 proven tools so your team can sell without you. 4-week intensive with guarantees for B2B founders.';
+const breadcrumbItems = [
+  {
+    name: "Home",
+    item: "https://utopica.net/en"
+  },
+  {
+    name: "Clarity Sprint",
+    item: "https://utopica.net/en/clarity-sprint"
+  }
+];
+const lang = 'en';
+---
+
+<Layout title={title} description={description}>
+  <BreadcrumbListSchema items={breadcrumbItems} client:only="react" />
+  <SprintServiceSchema lang={lang} client:only="react" />
+  <FAQSchemaExtended lang={lang} client:only="react" />
+  
+  <ScrollProgress client:load />
+  
+  <SprintHero lang={lang} client:load />
+  <SprintProblemStatic lang={lang} client:load />
+  <SprintProblemDeep lang={lang} client:load />
+  <SprintWhyNow lang={lang} client:load />
+  <SprintFailedSolutions lang={lang} client:load />
+  <SprintSuccessCriteria lang={lang} client:load />
+  <SprintComparisonStatic lang={lang} client:load />
+  <SprintProcess lang={lang} client:load />
+  <SprintBonuses lang={lang} client:load />
+  <SprintOffer lang={lang} client:load />
+  <SprintCTA lang={lang} client:load />
+  <SprintFAQ lang={lang} client:load />
+</Layout>

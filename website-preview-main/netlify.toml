@@ -1,0 +1,22 @@
+[build]
+  command = "npm run build"
+  # Astro builds static assets to dist/
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20.11.1"
+  NETLIFY_NEXT_PLUGIN_SKIP = "true"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[redirects]]
+  from = "/proposito"
+  to = "/"
+  status = 301
+  force = true

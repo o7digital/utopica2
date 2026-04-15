@@ -1,0 +1,174 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 40 33% 98%;
+    --foreground: 20 14% 10%;
+    --card: 40 33% 99%;
+    --card-foreground: 20 14% 10%;
+    --popover: 40 33% 99%;
+    --popover-foreground: 20 14% 10%;
+    --primary: 45 93% 47%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 40 20% 94%;
+    --secondary-foreground: 20 14% 10%;
+    --muted: 40 20% 94%;
+    --muted-foreground: 20 10% 40%;
+    --accent: 40 20% 94%;
+    --accent-foreground: 20 14% 10%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 40 15% 89%;
+    --input: 40 15% 89%;
+    --ring: 45 93% 47%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 20 14% 6%;
+    --foreground: 40 20% 94%;
+    --card: 20 14% 8%;
+    --card-foreground: 40 20% 94%;
+    --popover: 20 14% 8%;
+    --popover-foreground: 40 20% 94%;
+    --primary: 45 93% 52%;
+    --primary-foreground: 20 14% 6%;
+    --secondary: 20 14% 14%;
+    --secondary-foreground: 40 20% 94%;
+    --muted: 20 14% 14%;
+    --muted-foreground: 40 10% 60%;
+    --accent: 20 14% 14%;
+    --accent-foreground: 40 20% 94%;
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 40 20% 94%;
+    --border: 20 14% 14%;
+    --input: 20 14% 14%;
+    --ring: 45 93% 47%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* ===== MARCOS DE VENTA — marker highlight (archivo académico) ===== */
+.marker-highlight {
+  position: relative;
+  display: inline;
+  padding: 0 0.12em;
+  background-image: linear-gradient(
+    93deg,
+    hsl(var(--primary) / 0) 0%,
+    hsl(var(--primary) / 0.60) 3%,
+    hsl(var(--primary) / 0.55) 95%,
+    hsl(var(--primary) / 0) 100%
+  );
+  background-repeat: no-repeat;
+  background-size: 100% 62%;
+  background-position: 0 75%;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+.marker-highlight-sm {
+  position: relative;
+  display: inline;
+  padding: 0 0.1em;
+  background-image: linear-gradient(
+    92deg,
+    hsl(var(--primary) / 0) 0%,
+    hsl(var(--primary) / 0.55) 5%,
+    hsl(var(--primary) / 0.5) 95%,
+    hsl(var(--primary) / 0) 100%
+  );
+  background-repeat: no-repeat;
+  background-size: 100% 55%;
+  background-position: 0 78%;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* Grano muy sutil para el fondo cream — sensación "impreso" */
+.archive-grain {
+  position: relative;
+}
+.archive-grain::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.35;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.08 0 0 0 0 0.06 0 0 0 0 0.04 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 240px 240px;
+}
+
+/* Reglas hairline — separadores editoriales */
+.hairline {
+  height: 1px;
+  background-color: hsl(var(--foreground) / 0.12);
+}
+.hairline-thick {
+  height: 1px;
+  background-color: hsl(var(--foreground) / 0.85);
+}
+
+/* tabular-nums para métricas alineadas */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes blob {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(20px, -50px) scale(1.1); }
+  50% { transform: translate(-20px, 20px) scale(0.9); }
+  75% { transform: translate(50px, 20px) scale(1.05); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-blob {
+  animation: blob 10s infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--primary) / 0.3);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary) / 0.5);
+}
+
+.gradient-text {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-amber-500;
+}

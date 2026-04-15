@@ -1,0 +1,28 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { HeroSection } from '@/components/homepage/hero-section';
+import {
+  EditorialStakes,
+  EditorialInjusticia,
+  EditorialServicios,
+  EditorialIA,
+  EditorialFounder,
+  EditorialAudience,
+  EditorialCta,
+} from '@/components/homepage/editorial-sections';
+
+const title = 'Utópica — Consultoría de ventas B2B con IA | CDMX';
+const description =
+  'Tu calidad no se refleja en tus ventas. Eso es una injusticia comercial. Instalamos sistemas comerciales con IA para consultoras medianas en México — que funcionan aunque nadie esté mirando.';
+---
+
+<Layout title={title} description={description}>
+  <HeroSection client:load />
+  <EditorialStakes client:load />
+  <EditorialInjusticia client:load />
+  <EditorialServicios client:load />
+  <EditorialIA client:load />
+  <EditorialFounder client:load />
+  <EditorialAudience client:load />
+  <EditorialCta client:load />
+</Layout>

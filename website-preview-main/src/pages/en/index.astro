@@ -1,0 +1,17 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { ScrollProgress } from '@/components/ui/scroll-progress';
+import { HeroSliderEn, StakesSectionStaticEn, CommercialInjusticeSectionEn, ClarityPathSectionStaticEn, NextStepsSectionStaticEn } from '@/components/homepage/en';
+
+const title = 'Commercial Freedom for B2B Founders | UTOPICA';
+const description = 'Clarity, autonomy, and strategic growth for B2B teams in Mexico City. Build a sales engine that works without you.';
+---
+
+<Layout title={title} description={description}>
+  <ScrollProgress client:load />
+  <HeroSliderEn client:load />
+  <StakesSectionStaticEn client:load />
+  <CommercialInjusticeSectionEn client:load />
+  <ClarityPathSectionStaticEn client:load />
+  <NextStepsSectionStaticEn client:load />
+</Layout>

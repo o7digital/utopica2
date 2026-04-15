@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auditoría Interactiva de Claridad: Martos Metrics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .chart-container {
+            position: relative;
+            height: 350px;
+            width: 100%;
+            max-width: 450px;
+            margin: auto;
+        }
+        .tab-active {
+            border-bottom: 2px solid #3b82f6;
+            color: #3b82f6;
+            font-weight: 600;
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transition: all 0.3s ease-in-out;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .logout-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 50;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+    <!-- Botón de cerrar sesión -->
+    <button 
+        onclick="logout()"
+        class="logout-btn bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors text-sm font-medium shadow-lg"
+    >
+        Cerrar Sesión
+    </button>
+
+    <div class="container mx-auto p-4 md:p-8 max-w-5xl">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Auditoría Interactiva de Claridad</h1>
+            <p class="text-lg text-gray-600 mt-2">Para: <span id="clientName">Martos Metrics</span></p>
+        </header>
+
+        <section id="diagnosis" class="card p-6 md:p-8 mb-8">
+            <h2 class="text-2xl font-bold text-center mb-6">Diagnóstico General</h2>
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div>
+                    <div class="chart-container">
+                        <canvas id="clarityChart"></canvas>
+                    </div>
+                </div>
+                <div class="text-center md:text-left">
+                    <p class="text-lg text-gray-600 mb-4">Tu puntuación promedio de claridad comercial es:</p>
+                    <p id="average-score" class="text-6xl font-bold text-blue-600 mb-6">3.0/5</p>
+                    <h3 class="text-xl font-semibold mb-2">El Insight Clave para tu Negocio:</h3>
+                    <p id="key-insight" class="text-gray-700">Tu mensaje es profesional, pero al dirigirse a 'empresas de todos los tamaños', compite con toda la industria de consultoría de RH. La mayor oportunidad es especializarse en resolver un problema de talento muy costoso para un tipo de cliente específico.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="analysis" class="card p-6 md:p-8 mb-8">
+            <h2 class="text-2xl font-bold text-center mb-6">Análisis Detallado</h2>
+            <div class="border-b border-gray-200 mb-6">
+                <nav class="-mb-px flex justify-center space-x-4 md:space-x-8" aria-label="Tabs">
+                    <button class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm md:text-base text-gray-500 hover:text-blue-600 hover:border-gray-300 tab-active" data-tab="clarity">Claridad</button>
+                    <button class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm md:text-base text-gray-500 hover:text-blue-600 hover:border-gray-300" data-tab="relevance">Relevancia</button>
+                    <button class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm md:text-base text-gray-500 hover:text-blue-600 hover:border-gray-300" data-tab="differentiation">Diferenciación</button>
+                </nav>
+            </div>
+            <div id="tab-content" class="fade-in">
+            </div>
+        </section>
+
+        <section id="glossary" class="card p-6 md:p-8 mb-8">
+            <h2 class="text-2xl font-bold text-center mb-6">Glosario Interactivo: De Vago a Valioso</h2>
+            <p class="text-center text-gray-600 mb-6">Pequeños cambios en el lenguaje pueden tener un gran impacto. Selecciona un término para ver la diferencia.</p>
+            <div id="glossary-container" class="grid md:grid-cols-2 gap-6">
+                <div id="glossary-buttons" class="flex flex-col space-y-3">
+                </div>
+                <div id="glossary-display" class="bg-gray-50 p-6 rounded-lg min-h-[150px]">
+                    <div id="glossary-content">
+                        <p class="text-gray-500">Selecciona un término a la izquierda.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="next-steps" class="text-center bg-blue-600 text-white p-8 rounded-lg">
+            <h2 class="text-2xl font-bold mb-4">Siguientes Pasos</h2>
+            <p id="next-steps-text" class="max-w-3xl mx-auto mb-6">Este análisis muestra que tienen una base sólida y un enfoque relevante. Sin embargo, el mensaje actual le posiciona como una buena opción genérica. Un pequeño ajuste para enfocarse en un problema específico y articular su diferenciador único puede transformar sus resultados, haciendo que los clientes correctos sientan que *tienen* que trabajar con usted.</p>
+            <button onclick="scheduleCall()" class="bg-white text-blue-600 font-bold py-3 px-6 rounded-lg hover:bg-gray-100 transition-colors">
+                Agendar una Conversación
+            </button>
+        </section>
+    </div>
+
+    <script>
+        // Verificar autenticación
+        function checkAuth() {
+            if (sessionStorage.getItem('authenticated') !== 'true') {
+                window.location.href = 'index.html';
+                return false;
+            }
+            return true;
+        }
+
+        // Cerrar sesión
+        function logout() {
+            sessionStorage.clear();
+            window.location.href = 'index.html';
+        }
+
+        // Agendar llamada
+        function scheduleCall() {
+            // Redirigir a la página de agendamiento
+            window.open('https://app.reclaim.ai/m/gael/sesion-estrategica-claridad-comercial', '_blank');
+        }
+
+        // Verificar autenticación al cargar
+        if (!checkAuth()) {
+            // Si no está autenticado, la función ya redirige
+        } else {
+            // Obtener información del cliente
+            const urlParams = new URLSearchParams(window.location.search);
+            const client = urlParams.get('client') || sessionStorage.getItem('client') || 'default';
+            
+            // --- INICIO DE ZONA DE DATOS DINÁMICOS ---
+            
+            // Datos específicos por cliente
+            const clientData = {
+                'martos-metrics': {
+                    name: 'Martos Metrics',
+                    scores: [3, 4, 2],
+                    averageScore: '3.0',
+                    keyInsight: 'Tu mensaje es profesional, pero al dirigirse a "empresas de todos los tamaños", compite con toda la industria de consultoría de RH. La mayor oportunidad es especializarse en resolver un problema de talento muy costoso para un tipo de cliente específico.',
+                    nextSteps: 'Este análisis muestra que tienen una base sólida y un enfoque relevante. Sin embargo, el mensaje actual le posiciona como una buena opción genérica. Un pequeño ajuste para enfocarse en un problema específico y articular su diferenciador único puede transformar sus resultados, haciendo que los clientes correctos sientan que *tienen* que trabajar con usted.'
+                },
+                's4iot': {
+                    name: 'S4IoT',
+                    scores: [2, 3, 2],
+                    averageScore: '2.3',
+                    keyInsight: 'Actualmente venden tecnología y características (IoT, Plataformas, Sensores), no soluciones a problemas de negocio. El cambio fundamental es pasar de describir "lo que hace su plataforma" a comunicar "lo que el negocio de su cliente puede lograr", traduciendo cada característica técnica en un resultado tangible y medible.',
+                    nextSteps: 'Su tecnología es sólida, pero el mensaje no conecta con los dolores de un gerente no técnico. El desafío es traducir la jerga de "IoT" a un lenguaje de "ROI". Al enfocarse en los resultados financieros (ahorro de costos, reducción de pérdidas, eficiencia operativa), dejarán de ser un proveedor de tecnología para convertirse en un socio estratégico indispensable.'
+                },
+                'sensigas': {
+                    name: 'Sensigas',
+                    scores: [4, 3, 2],
+                    averageScore: '3.0',
+                    keyInsight: 'Tu experiencia técnica es evidente, pero el mensaje vende "detectores de gas" en lugar de vender "tranquilidad y operaciones ininterrumpidas". La oportunidad es cambiar el enfoque de las características del producto al resultado empresarial que un director de planta o un responsable de seguridad realmente compra.',
+                    nextSteps: 'La base técnica de Sensigas es fuerte, pero el mensaje no está conectando con el valor de negocio que realmente buscan sus clientes. Un ajuste en la comunicación para enfocarse en los resultados (seguridad, continuidad, cumplimiento sin esfuerzo) puede diferenciarles radicalmente de la competencia y atraer contratos de mayor valor.'
+                },
+                'default': {
+                    name: 'Cliente',
+                    scores: [3, 3, 3],
+                    averageScore: '3.0',
+                    keyInsight: 'Tu mensaje tiene potencial, pero necesita mayor claridad y enfoque para destacar en el mercado.',
+                    nextSteps: 'Este análisis proporciona una base para mejorar tu mensaje y posicionamiento en el mercado.'
+                }
+            };
+
+            // Cargar datos del cliente
+            const currentClient = clientData[client] || clientData['default'];
+            
+            // Actualizar el nombre del cliente
+            document.getElementById('clientName').textContent = currentClient.name;
+            document.getElementById('average-score').textContent = currentClient.averageScore + '/5';
+            document.getElementById('key-insight').textContent = currentClient.keyInsight;
+            document.getElementById('next-steps-text').textContent = currentClient.nextSteps;
+
+            // 1. DATOS DEL GRÁFICO
+            const chartData = {
+                scores: currentClient.scores
+            };
+
+            // 2. DATOS DEL ANÁLISIS DETALLADO
+            const analysisDataByClient = {
+                'martos-metrics': {
+                    clarity: {
+                        title: "Claridad",
+                        strengths: [
+                            "El servicio principal ('Soluciones RH') se entiende de inmediato.",
+                            "El nombre 'Metrics' comunica eficazmente un enfoque basado en datos."
+                        ],
+                        opportunities: [
+                            "El público objetivo ('empresas de todos los tamaños') es demasiado amplio, lo que debilita el impacto del mensaje para cualquier segmento específico.",
+                            "Frases como 'optimización del talento' son abstractas y no describen un problema concreto que el cliente reconoce."
+                        ],
+                        questions: [
+                            "Si solo pudieras resolver un problema de RH por el resto de tu carrera, ¿cuál sería?",
+                            "¿Cuál es el tipo de empresa que más se beneficia de tu enfoque basado en datos?"
+                        ]
+                    },
+                    relevance: {
+                        title: "Relevancia",
+                        strengths: [
+                            "La gestión del talento es un desafío universal y altamente relevante para cualquier negocio.",
+                            "Ofrecer 'transformar la gestión de RH' apela a un deseo claro de los líderes empresariales."
+                        ],
+                        opportunities: [
+                            "El mensaje no conecta con los costos económicos de una mala gestión de talento (ej: '¿cuánto te cuesta reemplazar a un buen empleado?').",
+                            "No se genera urgencia. El problema se presenta como importante, pero no como algo que deba resolverse 'ahora'."
+                        ],
+                        questions: [
+                            "¿Cuál es el resultado final, en números, que un cliente obtiene después de trabajar con ustedes?",
+                            "¿Qué es lo que le quita el sueño a tu cliente ideal sobre su equipo?"
+                        ]
+                    },
+                    differentiation: {
+                        title: "Diferenciación",
+                        strengths: [
+                            "El enfoque en 'datos' y 'métricas' es un buen punto de partida para diferenciarse de consultores más tradicionales.",
+                            "El llamado a 'estrategias innovadoras' sugiere una perspectiva moderna."
+                        ],
+                        opportunities: [
+                            "El mensaje es muy similar al de muchas otras consultorías de RH que también claman ser 'estratégicas' y 'personalizadas'.",
+                            "No se articula una metodología única o una filosofía propia que los haga memorables y distintos."
+                        ],
+                        questions: [
+                            "¿Qué creen sobre los RRHH que la mayoría de las consultorías considera una 'verdad' incuestionable?",
+                            "¿Por qué es su enfoque basado en datos superior a la experiencia de un gerente de RH tradicional?"
+                        ]
+                    }
+                },
+                's4iot': {
+                    clarity: {
+                        title: "Claridad",
+                        strengths: [
+                            "Se enumeran aplicaciones específicas de la tecnología (Smart Buildings, Asset Tracking).",
+                            "La arquitectura de la solución está visualmente representada, lo que es útil para un público técnico."
+                        ],
+                        opportunities: [
+                            "El lenguaje está lleno de jerga (IoT, SaaS, Gateway, API REST) que aliena a los responsables de negocio.",
+                            "La propuesta de valor principal no es evidente en los primeros 5 segundos. No queda claro qué gran problema resuelven."
+                        ],
+                        questions: [
+                            "Si un Director Financiero visitara la web, ¿entendería cómo S4IoT le ayuda a ganar o ahorrar dinero?",
+                            "¿Cuál es el resultado final, en euros o en porcentaje, que un cliente obtiene con su solución más popular?"
+                        ]
+                    },
+                    relevance: {
+                        title: "Relevancia",
+                        strengths: [
+                            "Abordan áreas de negocio importantes como la gestión de activos y la eficiencia de edificios.",
+                            "Ofrecen soluciones tanto de software como de hardware, lo que indica un control integral."
+                        ],
+                        opportunities: [
+                            "El mensaje no conecta las características con los dolores de negocio urgentes (ej. costos de mantenimiento disparados, robos de equipo, consumo energético excesivo).",
+                            "Falta un lenguaje que genere urgencia. ¿Por qué un cliente debería resolver este problema ahora y no el próximo trimestre?"
+                        ],
+                        questions: [
+                            "¿Cuál es el costo diario para sus clientes de *no* tener su solución implementada?",
+                            "¿Qué métrica clave de negocio (KPI) de su cliente mejora drásticamente gracias a S4IoT?"
+                        ]
+                    },
+                    differentiation: {
+                        title: "Diferenciación",
+                        strengths: [
+                            "El desarrollo de hardware propio (S4Gateway) es un potencial diferenciador técnico.",
+                            "La capacidad de integración con sistemas existentes es un punto valioso."
+                        ],
+                        opportunities: [
+                            "El mensaje es muy similar al de cientos de otras plataformas IoT. No hay una opinión fuerte o una metodología única que los haga memorables.",
+                            "No se posicionan contra un 'enemigo' claro (ej. 'la complejidad del IoT', 'las soluciones que no se integran', 'la pérdida de datos')."
+                        ],
+                        questions: [
+                            "¿Por qué un cliente debería elegirlos a ustedes por encima de cualquier otra plataforma IoT del mercado?",
+                            "¿Qué es algo que S4IoT cree sobre el futuro de las operaciones industriales que otras empresas no ven?"
+                        ]
+                    }
+                },
+                'sensigas': {
+                    clarity: {
+                        title: "Claridad",
+                        strengths: [
+                            "Los tipos de productos (fijos, portátiles, etc.) están bien definidos.",
+                            "El lenguaje es técnicamente preciso, lo que genera confianza en los expertos."
+                        ],
+                        opportunities: [
+                            "El mensaje se centra en el 'qué' (detectores) y no en el 'por qué' (evitar desastres, proteger vidas, asegurar la producción).",
+                            "El público objetivo no está claramente definido. ¿Hablan a un ingeniero, un gerente de seguridad o un director financiero? Cada uno tiene dolores diferentes."
+                        ],
+                        questions: [
+                            "¿Cuál es la pesadilla número 1 de un jefe de planta que tus productos eliminan por completo?",
+                            "Si un cliente solo pudiera recordar una cosa sobre Sensigas, ¿qué debería ser?"
+                        ]
+                    },
+                    relevance: {
+                        title: "Relevancia",
+                        strengths: [
+                            "La detección de gases es una necesidad crítica e ineludible en muchas industrias, lo que hace que la oferta sea intrínsecamente relevante.",
+                            "Mencionan 'aplicaciones' y 'sectores', lo que demuestra conocimiento del mercado."
+                        ],
+                        opportunities: [
+                            "No se cuantifica el costo de NO tener una solución fiable (ej. 'Evite paradas de producción que cuestan X€ por hora').",
+                            "El mensaje no apela a la emoción del responsable: la tranquilidad de saber que su equipo está seguro."
+                        ],
+                        questions: [
+                            "Además de la seguridad, ¿cuál es el mayor beneficio económico que obtienen sus clientes?",
+                            "¿Qué le impide dormir por la noche a tu cliente ideal?"
+                        ]
+                    },
+                    differentiation: {
+                        title: "Diferenciación",
+                        strengths: [
+                            "La oferta de 'Servicios' como la calibración y el mantenimiento es un buen diferenciador potencial.",
+                            "Ser un 'socio' es una buena aspiración, pero necesita ser demostrada."
+                        ],
+                        opportunities: [
+                            "El mensaje es muy similar al de otros proveedores de equipos de detección. No hay una postura única o una 'filosofía' clara.",
+                            "¿Por qué elegirlos a ustedes sobre un gigante como Dräger o Honeywell? La respuesta a esa pregunta no está clara en la web."
+                        ],
+                        questions: [
+                            "¿Qué hace Sensigas que sus competidores odiarían que sus clientes supieran?",
+                            "Si tuvieran que definirse en tres palabras que no fueran 'calidad', 'seguridad' o 'confianza', ¿cuáles serían?"
+                        ]
+                    }
+                }
+            };
+            
+            // Seleccionar los datos del análisis según el cliente
+            const analysisData = analysisDataByClient[client] || analysisDataByClient['martos-metrics'];
+
+            // 3. DATOS DEL GLOSARIO
+            const glossaryDataByClient = {
+                'martos-metrics': [
+                    {
+                        term: "Optimización del talento",
+                        impact: "Es jerga corporativa. Un CEO no busca 'optimizar', busca 'reducir la rotación' o 'aumentar la productividad'.",
+                        suggestion: "Ayudamos a que tus empleados clave se queden más tiempo y produzcan mejores resultados."
+                    },
+                    {
+                        term: "Enfoque integral",
+                        impact: "Suena abrumador y poco claro. El cliente no busca algo 'integral', busca una solución a un problema específico.",
+                        suggestion: "Conectamos el desempeño del personal directamente con los resultados financieros de tu empresa."
+                    },
+                    {
+                        term: "Estrategias personalizadas",
+                        impact: "Es un término genérico que usan todas las consultorías. No significa nada concreto para el cliente.",
+                        suggestion: "Un plan de acción de 90 días para reducir la rotación en tu departamento más crítico."
+                    }
+                ],
+                's4iot': [
+                    {
+                        term: "Plataforma IoT integral",
+                        impact: "Es lo que dicen todos. Suena a un proyecto de TI complejo y no comunica valor real al negocio.",
+                        suggestion: "La forma más simple de saber qué pasa con sus activos más valiosos, en tiempo real y sin complicaciones técnicas."
+                    },
+                    {
+                        term: "Monitorización de activos",
+                        impact: "Es una descripción técnica de una característica, no un resultado de negocio que un gerente busca.",
+                        suggestion: "Reduzca la pérdida de equipos y maquinaria hasta en un 90% y optimice su uso para evitar paradas."
+                    },
+                    {
+                        term: "Smart Buildings",
+                        impact: "Un concepto demasiado amplio. No le dice al dueño del edificio qué beneficio específico va a obtener.",
+                        suggestion: "Reduzca los costos de energía y mantenimiento de su edificio hasta en un 30%, mejorando la comodidad."
+                    }
+                ],
+                'sensigas': [
+                    {
+                        term: "Soluciones de detección de gas",
+                        impact: "Es un término técnico y genérico. No comunica valor de negocio.",
+                        suggestion: "Sistemas que garantizan la seguridad de tu personal y la continuidad de tus operaciones 24/7."
+                    },
+                    {
+                        term: "Conformidad reglamentaria",
+                        impact: "Suena pasivo y a una obligación. Es un requisito mínimo, no un beneficio.",
+                        suggestion: "Supera las normativas y convierte la seguridad en una ventaja competitiva para tu empresa."
+                    },
+                    {
+                        term: "Un socio de confianza",
+                        impact: "Es un cliché que usan todas las empresas. No significa nada sin pruebas.",
+                        suggestion: "Un equipo de expertos dedicados a tu planta, con soporte técnico en menos de 24 horas."
+                    }
+                ]
+            };
+            
+            // Seleccionar los datos del glosario según el cliente
+            const glossaryData = glossaryDataByClient[client] || glossaryDataByClient['martos-metrics'];
+
+            // --- FIN DE ZONA DE DATOS DINÁMICOS ---
+
+            document.addEventListener('DOMContentLoaded', () => {
+                // Lógica del Gráfico
+                const ctx = document.getElementById('clarityChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'radar',
+                    data: {
+                        labels: ['Claridad', 'Relevancia', 'Diferenciación'],
+                        datasets: [{
+                            label: 'Puntuación',
+                            data: chartData.scores,
+                            backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                            borderColor: 'rgba(59, 130, 246, 1)',
+                            borderWidth: 2,
+                            pointBackgroundColor: 'rgba(59, 130, 246, 1)',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: 'rgba(59, 130, 246, 1)'
+                        }]
+                    },
+                    options: {
+                        maintainAspectRatio: false,
+                        scales: {
+                            r: {
+                                angleLines: { color: 'rgba(0, 0, 0, 0.1)' },
+                                grid: { color: 'rgba(0, 0, 0, 0.1)' },
+                                pointLabels: { font: { size: 14 } },
+                                suggestedMin: 0,
+                                suggestedMax: 5,
+                                ticks: {
+                                    stepSize: 1,
+                                    backdropColor: 'transparent'
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        }
+                    }
+                });
+
+                // Lógica de Pestañas (Tabs)
+                const tabButtons = document.querySelectorAll('.tab-button');
+                const tabContentContainer = document.getElementById('tab-content');
+
+                function renderTabContent(tabKey) {
+                    const data = analysisData[tabKey];
+                    tabContentContainer.innerHTML = `
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h3 class="font-semibold text-lg mb-3 text-green-600">Fortalezas</h3>
+                                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                                    ${data.strengths.map(item => `<li>${item}</li>`).join('')}
+                                </ul>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-lg mb-3 text-yellow-600">Oportunidades</h3>
+                                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                                    ${data.opportunities.map(item => `<li>${item}</li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="mt-6 pt-6 border-t">
+                            <h3 class="font-semibold text-lg mb-3 text-blue-600">Preguntas de Reflexión</h3>
+                            <ul class="list-decimal list-inside space-y-2 text-gray-700">
+                                ${data.questions.map(item => `<li>${item}</li>`).join('')}
+                            </ul>
+                        </div>
+                    `;
+                    tabContentContainer.classList.remove('fade-in');
+                    void tabContentContainer.offsetWidth;
+                    tabContentContainer.classList.add('fade-in');
+                }
+
+                tabButtons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        tabButtons.forEach(btn => btn.classList.remove('tab-active'));
+                        button.classList.add('tab-active');
+                        renderTabContent(button.dataset.tab);
+                    });
+                });
+
+                renderTabContent('clarity');
+
+                // Lógica del Glosario
+                const glossaryButtonsContainer = document.getElementById('glossary-buttons');
+                const glossaryContent = document.getElementById('glossary-content');
+
+                glossaryData.forEach((item, index) => {
+                    const button = document.createElement('button');
+                    button.textContent = item.term;
+                    button.className = 'glossary-term-button text-left p-3 rounded-md border border-gray-300 hover:bg-gray-100 hover:border-blue-500 transition-colors';
+                    button.dataset.index = index;
+                    glossaryButtonsContainer.appendChild(button);
+                });
+
+                glossaryButtonsContainer.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('glossary-term-button')) {
+                        document.querySelectorAll('.glossary-term-button').forEach(btn => btn.classList.remove('bg-blue-100', 'border-blue-500'));
+                        e.target.classList.add('bg-blue-100', 'border-blue-500');
+
+                        const item = glossaryData[e.target.dataset.index];
+                        glossaryContent.innerHTML = `
+                            <div class="fade-in">
+                                <p class="text-sm font-semibold text-red-600 mb-2">Término Vago:</p>
+                                <p class="mb-4 italic text-gray-500">"${item.term}"</p>
+                                <p class="text-sm font-semibold text-gray-800 mb-2">Impacto Negativo Potencial:</p>
+                                <p class="mb-4 text-gray-700">${item.impact}</p>
+                                <p class="text-sm font-semibold text-green-600 mb-2">Sugerencia de Reemplazo:</p>
+                                <p class="font-semibold text-gray-900">"${item.suggestion}"</p>
+                            </div>
+                        `;
+                    }
+                });
+            });
+
+            // Auto-logout después de 2 horas
+            setTimeout(() => {
+                alert('Tu sesión ha expirado. Por favor, vuelve a iniciar sesión.');
+                logout();
+            }, 2 * 60 * 60 * 1000);
+        }
+    </script>
+</body>
+</html>

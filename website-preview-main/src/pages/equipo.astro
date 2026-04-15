@@ -1,0 +1,20 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { BreadcrumbListSchema } from '@/components/schema-org';
+import { EditorialEquipo } from '@/components/team/editorial-equipo';
+
+const title = 'Nosotros · Utópica — Consultoría de Ventas B2B';
+const description =
+  'Un equipo lean apoyado por un consejo de siete líderes que han escalado consultoras y plataformas en Latinoamérica. Conoce a Gaël Thomé y al consejo independiente de Utópica.';
+
+const breadcrumbItems = [
+  { name: 'Inicio', item: 'https://utopica.net/' },
+  { name: 'Nosotros', item: 'https://utopica.net/equipo' },
+];
+---
+
+<Layout title={title} description={description}>
+  <BreadcrumbListSchema items={breadcrumbItems} client:only="react" />
+
+  <EditorialEquipo client:load />
+</Layout>

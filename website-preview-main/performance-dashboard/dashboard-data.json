@@ -1,0 +1,330 @@
+{
+  "timestamp": "2025-07-27T06:33:30.252Z",
+  "status": "warning",
+  "latest": {
+    "timestamp": "2025-07-27T06:31:20.424Z",
+    "environment": "development",
+    "duration": 129826,
+    "urls": {
+      "Homepage": {
+        "url": "http://localhost:3000",
+        "name": "Homepage",
+        "priority": "P0",
+        "timestamp": "2025-07-27T06:31:53.229Z",
+        "scores": {
+          "performance": 0,
+          "accessibility": 0,
+          "bestPractices": 0,
+          "seo": 0
+        },
+        "metrics": {
+          "lcp": 0,
+          "fcp": 0,
+          "cls": 0,
+          "si": 0,
+          "tbt": 0,
+          "ttfb": 0
+        },
+        "opportunities": [],
+        "diagnostics": [],
+        "environment": "development"
+      },
+      "Sprint Landing": {
+        "url": "http://localhost:3000/sprint-claridad-comercial",
+        "name": "Sprint Landing",
+        "priority": "P0",
+        "timestamp": "2025-07-27T06:32:25.597Z",
+        "scores": {
+          "performance": 0,
+          "accessibility": 0,
+          "bestPractices": 0,
+          "seo": 0
+        },
+        "metrics": {
+          "lcp": 0,
+          "fcp": 0,
+          "cls": 0,
+          "si": 0,
+          "tbt": 0,
+          "ttfb": 0
+        },
+        "opportunities": [],
+        "diagnostics": [],
+        "environment": "development"
+      },
+      "Team Page": {
+        "url": "http://localhost:3000/equipo",
+        "name": "Team Page",
+        "priority": "P1",
+        "timestamp": "2025-07-27T06:32:57.929Z",
+        "scores": {
+          "performance": 0,
+          "accessibility": 0,
+          "bestPractices": 0,
+          "seo": 0
+        },
+        "metrics": {
+          "lcp": 0,
+          "fcp": 0,
+          "cls": 0,
+          "si": 0,
+          "tbt": 0,
+          "ttfb": 0
+        },
+        "opportunities": [],
+        "diagnostics": [],
+        "environment": "development"
+      },
+      "Workshops API": {
+        "url": "http://localhost:3000/api/workshops",
+        "name": "Workshops API",
+        "priority": "P2",
+        "timestamp": "2025-07-27T06:33:30.195Z",
+        "scores": {
+          "performance": 0,
+          "accessibility": 0,
+          "bestPractices": 0,
+          "seo": 0
+        },
+        "metrics": {
+          "lcp": 0,
+          "fcp": 0,
+          "cls": 0,
+          "si": 0,
+          "tbt": 0,
+          "ttfb": 0
+        },
+        "opportunities": [],
+        "diagnostics": [],
+        "environment": "development"
+      }
+    },
+    "summary": {
+      "totalUrls": 4,
+      "successfulUrls": 4,
+      "failedUrls": 0,
+      "averageScores": {
+        "performance": 0,
+        "accessibility": 0,
+        "bestPractices": 0,
+        "seo": 0
+      },
+      "averageMetrics": {
+        "lcp": 0,
+        "fcp": 0,
+        "cls": 0,
+        "si": 0,
+        "tbt": 0
+      },
+      "healthStatus": {
+        "status": "warning",
+        "percentage": 50,
+        "checks": {
+          "performance": false,
+          "lcp": true,
+          "cls": true,
+          "accessibility": false
+        },
+        "summary": "2/4 health checks passing"
+      }
+    },
+    "alerts": [
+      {
+        "level": "critical",
+        "type": "performance_score",
+        "url": "Homepage",
+        "priority": "P0",
+        "metric": "Performance Score",
+        "value": 0,
+        "threshold": 85,
+        "message": "Performance score 0% is below critical threshold 85%",
+        "timestamp": "2025-07-27T06:31:53.288Z"
+      },
+      {
+        "level": "critical",
+        "type": "accessibility",
+        "url": "Homepage",
+        "priority": "P0",
+        "metric": "Accessibility Score",
+        "value": 0,
+        "threshold": 90,
+        "message": "Accessibility score 0% is below critical threshold 90%",
+        "timestamp": "2025-07-27T06:31:53.288Z"
+      },
+      {
+        "level": "critical",
+        "type": "performance_score",
+        "url": "Sprint Landing",
+        "priority": "P0",
+        "metric": "Performance Score",
+        "value": 0,
+        "threshold": 85,
+        "message": "Performance score 0% is below critical threshold 85%",
+        "timestamp": "2025-07-27T06:32:25.670Z"
+      },
+      {
+        "level": "critical",
+        "type": "accessibility",
+        "url": "Sprint Landing",
+        "priority": "P0",
+        "metric": "Accessibility Score",
+        "value": 0,
+        "threshold": 90,
+        "message": "Accessibility score 0% is below critical threshold 90%",
+        "timestamp": "2025-07-27T06:32:25.670Z"
+      },
+      {
+        "level": "critical",
+        "type": "performance_score",
+        "url": "Team Page",
+        "priority": "P1",
+        "metric": "Performance Score",
+        "value": 0,
+        "threshold": 85,
+        "message": "Performance score 0% is below critical threshold 85%",
+        "timestamp": "2025-07-27T06:32:57.982Z"
+      },
+      {
+        "level": "critical",
+        "type": "accessibility",
+        "url": "Team Page",
+        "priority": "P1",
+        "metric": "Accessibility Score",
+        "value": 0,
+        "threshold": 90,
+        "message": "Accessibility score 0% is below critical threshold 90%",
+        "timestamp": "2025-07-27T06:32:57.982Z"
+      },
+      {
+        "level": "critical",
+        "type": "performance_score",
+        "url": "Workshops API",
+        "priority": "P2",
+        "metric": "Performance Score",
+        "value": 0,
+        "threshold": 85,
+        "message": "Performance score 0% is below critical threshold 85%",
+        "timestamp": "2025-07-27T06:33:30.249Z"
+      },
+      {
+        "level": "critical",
+        "type": "accessibility",
+        "url": "Workshops API",
+        "priority": "P2",
+        "metric": "Accessibility Score",
+        "value": 0,
+        "threshold": 90,
+        "message": "Accessibility score 0% is below critical threshold 90%",
+        "timestamp": "2025-07-27T06:33:30.249Z"
+      }
+    ],
+    "recommendations": [
+      {
+        "priority": "high",
+        "category": "performance",
+        "title": "Improve Performance Score",
+        "description": "Average performance score is 0%. Focus on LCP and TBT optimizations.",
+        "actions": [
+          "Optimize images and use modern formats (WebP, AVIF)",
+          "Implement code splitting and lazy loading",
+          "Minimize and compress JavaScript",
+          "Use a CDN for static assets"
+        ]
+      },
+      {
+        "priority": "medium",
+        "category": "accessibility",
+        "title": "Improve Accessibility",
+        "description": "Accessibility score is 0%. Target is above 95%.",
+        "actions": [
+          "Add alt text to all images",
+          "Ensure sufficient color contrast",
+          "Provide focus indicators",
+          "Use semantic HTML elements"
+        ]
+      }
+    ]
+  },
+  "trends": {
+    "data": [
+      {
+        "timestamp": "2025-07-27T06:29:43.376Z",
+        "environment": "development",
+        "summary": {
+          "error": "No valid results"
+        },
+        "alertCount": 4
+      },
+      {
+        "timestamp": "2025-07-27T06:30:18.277Z",
+        "environment": "development",
+        "summary": {
+          "totalUrls": 4,
+          "successfulUrls": 4,
+          "failedUrls": 0,
+          "averageScores": {
+            "performance": 0,
+            "accessibility": 0,
+            "bestPractices": 0,
+            "seo": 0
+          },
+          "averageMetrics": {
+            "lcp": 0,
+            "fcp": 0,
+            "cls": 0,
+            "si": 0,
+            "tbt": 0
+          },
+          "healthStatus": {
+            "status": "warning",
+            "percentage": 50,
+            "checks": {
+              "performance": false,
+              "lcp": true,
+              "cls": true,
+              "accessibility": false
+            },
+            "summary": "2/4 health checks passing"
+          }
+        },
+        "alertCount": 8
+      },
+      {
+        "timestamp": "2025-07-27T06:31:20.424Z",
+        "environment": "development",
+        "summary": {
+          "totalUrls": 4,
+          "successfulUrls": 4,
+          "failedUrls": 0,
+          "averageScores": {
+            "performance": 0,
+            "accessibility": 0,
+            "bestPractices": 0,
+            "seo": 0
+          },
+          "averageMetrics": {
+            "lcp": 0,
+            "fcp": 0,
+            "cls": 0,
+            "si": 0,
+            "tbt": 0
+          },
+          "healthStatus": {
+            "status": "warning",
+            "percentage": 50,
+            "checks": {
+              "performance": false,
+              "lcp": true,
+              "cls": true,
+              "accessibility": false
+            },
+            "summary": "2/4 health checks passing"
+          }
+        },
+        "alertCount": 8
+      }
+    ],
+    "trends": null
+  },
+  "summary": {}
+}

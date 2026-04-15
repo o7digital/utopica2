@@ -1,0 +1,36 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { ServicioPage } from '@/components/servicios/servicio-page';
+import { servicios, getServicioBySlug } from '@/components/servicios/data';
+import { BreadcrumbListSchema } from '@/components/schema-org';
+
+export async function getStaticPaths() {
+  return servicios.map((s) => ({
+    params: { slug: s.slug },
+    props: { servicio: s },
+  }));
+}
+
+const { slug } = Astro.params;
+const { servicio } = Astro.props;
+
+const s = servicio ?? getServicioBySlug(slug as string);
+if (!s) {
+  return Astro.redirect('/');
+}
+
+const title = `${s.shortTitle} · Utópica — Consultoría B2B`;
+const description = s.tagline;
+
+const breadcrumbItems = [
+  { name: 'Inicio', item: 'https://utopica.net/' },
+  { name: 'Servicios', item: 'https://utopica.net/#servicios' },
+  { name: s.shortTitle, item: `https://utopica.net/servicios/${s.slug}` },
+];
+---
+
+<Layout title={title} description={description}>
+  <BreadcrumbListSchema items={breadcrumbItems} client:only="react" />
+
+  <ServicioPage client:load servicio={s} />
+</Layout>

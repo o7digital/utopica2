@@ -1,0 +1,34 @@
+{
+  "timestamp": "2025-07-27T06:29:16.709Z",
+  "targets": {
+    "lcp": 1500,
+    "fid": 100,
+    "cls": 0.1,
+    "ttfb": 300,
+    "performance": 90
+  },
+  "results": [
+    {
+      "url": "http://localhost:3000",
+      "error": "lighthouse is not a function"
+    },
+    {
+      "url": "http://localhost:3000/sprint-claridad-comercial",
+      "error": "lighthouse is not a function"
+    },
+    {
+      "url": "http://localhost:3000/equipo",
+      "error": "lighthouse is not a function"
+    }
+  ],
+  "summary": {
+    "totalUrls": 3,
+    "averagePerformanceScore": 0,
+    "averageAccessibilityScore": 0,
+    "averageSEOScore": 0,
+    "averageBestPracticesScore": 0,
+    "webVitalsCompliance": 0,
+    "totalViolations": 0,
+    "performanceTargetsMet": 0
+  }
+}
