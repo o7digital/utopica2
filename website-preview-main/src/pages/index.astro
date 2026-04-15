@@ -1,28 +1,100 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { HeroSection } from '@/components/homepage/hero-section';
-import {
-  EditorialStakes,
-  EditorialInjusticia,
-  EditorialServicios,
-  EditorialIA,
-  EditorialFounder,
-  EditorialAudience,
-  EditorialCta,
-} from '@/components/homepage/editorial-sections';
 
-const title = 'Utópica — Consultoría de ventas B2B con IA | CDMX';
+const title = 'Utópica — Consultoría digital para ordenar tu sitio y convertir mejor';
 const description =
-  'Tu calidad no se refleja en tus ventas. Eso es una injusticia comercial. Instalamos sistemas comerciales con IA para consultoras medianas en México — que funcionan aunque nadie esté mirando.';
+  'Reestructuramos sitios para que se entiendan rápido, se vean serios y ayuden a generar negocio.';
+
+const services = [
+  {
+    title: 'Claridad',
+    description: 'Comprensión inmediata',
+  },
+  {
+    title: 'Estructura',
+    description: 'Recorrido lógico y ordenado',
+  },
+  {
+    title: 'Conversión',
+    description: 'Generación de negocio',
+  },
+];
+
+const scheduleHref =
+  (import.meta.env.PUBLIC_RECLAIM_URL as string | undefined) ||
+  'https://app.reclaim.ai/m/gael/sesion-estrategica-claridad-comercial';
 ---
 
 <Layout title={title} description={description}>
-  <HeroSection client:load />
-  <EditorialStakes client:load />
-  <EditorialInjusticia client:load />
-  <EditorialServicios client:load />
-  <EditorialIA client:load />
-  <EditorialFounder client:load />
-  <EditorialAudience client:load />
-  <EditorialCta client:load />
+  <div class="bg-[#f7f5f2] text-[#111111] transition-colors duration-300 dark:bg-[#0b0c0e] dark:text-white">
+    <section class="relative flex h-[80vh] items-center overflow-hidden pt-20" aria-labelledby="homepage-hero-title">
+      <div class="absolute inset-0">
+        <img
+          src="/images/utopica2.jpg"
+          alt="Equipo de negocio trabajando en una mesa"
+          class="h-full w-full object-cover"
+        />
+        <div class="absolute inset-0 bg-black/60"></div>
+      </div>
+
+      <div class="relative mx-auto w-full max-w-7xl px-6">
+        <div class="max-w-4xl">
+          <h1 id="homepage-hero-title" class="text-5xl font-semibold leading-[0.95] text-white lg:text-6xl">
+            Tu sitio no refleja
+            <br />
+            el nivel de tu negocio
+          </h1>
+          <p class="mt-6 text-lg text-white/80">
+            Lo hacemos claro, estructurado y enfocado a resultados
+          </p>
+          <div class="mt-8 flex flex-col gap-4 sm:flex-row">
+            <a
+              href={scheduleHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-black transition hover:bg-white/90"
+            >
+              Ver propuesta
+            </a>
+            <a
+              href="#servicios"
+              class="inline-flex items-center justify-center rounded-full border border-white/30 px-6 py-3 text-white transition hover:bg-white/10"
+            >
+              Cómo trabajamos
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="servicios" class="mx-auto max-w-7xl px-6 py-24" aria-labelledby="services-title">
+      <h2 id="services-title" class="mb-12 text-3xl font-semibold">Servicios</h2>
+      <div class="grid gap-6 md:grid-cols-3">
+        {services.map((service) => (
+          <article class="rounded-xl border border-black/10 bg-white p-6 dark:border-white/10 dark:bg-[#121317]">
+            <h3 class="text-xl font-semibold">{service.title}</h3>
+            <p class="mt-2 text-sm text-[#555555] dark:text-white/70">
+              {service.description}
+            </p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="py-20 text-center" aria-labelledby="final-cta-title">
+      <div class="mx-auto max-w-3xl px-6">
+        <h2 id="final-cta-title" class="text-3xl font-semibold">
+          ¿Pasamos a un sitio serio?
+        </h2>
+        <a
+          href={scheduleHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-6 inline-flex items-center justify-center rounded-full bg-black px-6 py-3 text-white transition hover:bg-black/90 dark:bg-white dark:text-black dark:hover:bg-white/90"
+        >
+          Lanzar
+        </a>
+      </div>
+    </section>
+  </div>
 </Layout>
