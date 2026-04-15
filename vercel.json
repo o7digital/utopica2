@@ -1,0 +1,7 @@
+{
+  "framework": "astro",
+  "installCommand": "cd website-preview-main && npm ci",
+  "buildCommand": "cd website-preview-main && npm run build",
+  "outputDirectory": "website-preview-main/dist",
+  "devCommand": "cd website-preview-main && npm run dev"
+}
