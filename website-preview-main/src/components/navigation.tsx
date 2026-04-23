@@ -81,14 +81,15 @@ export function Navigation({ pathname = "/" }: NavigationProps = {}) {
     "https://app.reclaim.ai/m/gael/sesion-estrategica-claridad-comercial";
 
   const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
+  const isHomeTop = pathname === "/" && !scrolled;
 
   return (
     <nav
       className={cn(
         "fixed w-full z-50 transition-all duration-300",
-        scrolled
-          ? "bg-background/95 backdrop-blur-md border-b border-foreground/15"
-          : "bg-background/80 backdrop-blur-sm border-b border-transparent"
+        isHomeTop
+          ? "bg-black/25 backdrop-blur-sm border-b border-transparent"
+          : "bg-background/95 backdrop-blur-md border-b border-foreground/15"
       )}
       role="navigation"
       aria-label="Navegación principal"
@@ -103,7 +104,7 @@ export function Navigation({ pathname = "/" }: NavigationProps = {}) {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/" aria-label="Ir a la página de inicio">
-              <Logo className="w-[120px] h-[32px]" />
+              <Logo className={cn("w-[120px] h-[32px]", isHomeTop && "drop-shadow-[0_1px_2px_rgba(0,0,0,0.45)]")} />
             </Link>
           </div>
 
@@ -119,8 +120,8 @@ export function Navigation({ pathname = "/" }: NavigationProps = {}) {
                   className={cn(
                     "group inline-flex items-center gap-1.5 px-3 py-2 font-mono text-[11px] tracking-[0.14em] uppercase transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-sm",
                     pathname.startsWith("/servicios")
-                      ? "text-foreground"
-                      : "text-foreground/60 hover:text-foreground"
+                      ? isHomeTop ? "text-white" : "text-foreground"
+                      : isHomeTop ? "text-white/75 hover:text-white" : "text-foreground/60 hover:text-foreground"
                   )}
                 >
                   Servicios
@@ -146,8 +147,8 @@ export function Navigation({ pathname = "/" }: NavigationProps = {}) {
                   className={cn(
                     "group inline-flex items-center gap-1.5 px-3 py-2 font-mono text-[11px] tracking-[0.14em] uppercase transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-sm",
                     pathname.startsWith("/marcos-venta") || pathname.startsWith("/blog")
-                      ? "text-foreground"
-                      : "text-foreground/60 hover:text-foreground"
+                      ? isHomeTop ? "text-white" : "text-foreground"
+                      : isHomeTop ? "text-white/75 hover:text-white" : "text-foreground/60 hover:text-foreground"
                   )}
                 >
                   Recursos
@@ -176,8 +177,8 @@ export function Navigation({ pathname = "/" }: NavigationProps = {}) {
                     className={cn(
                       "inline-flex items-center px-3 py-2 font-mono text-[11px] tracking-[0.14em] uppercase transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-sm",
                       isActive("/equipo")
-                        ? "text-foreground"
-                        : "text-foreground/60 hover:text-foreground"
+                        ? isHomeTop ? "text-white" : "text-foreground"
+                        : isHomeTop ? "text-white/75 hover:text-white" : "text-foreground/60 hover:text-foreground"
                     )}
                   >
                     Nosotros
@@ -193,7 +194,12 @@ export function Navigation({ pathname = "/" }: NavigationProps = {}) {
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => trackConversion.agendarSesion("navigation_desktop")}
-                    className="group inline-flex items-center gap-2 border border-foreground bg-foreground text-background font-mono text-[11px] tracking-[0.14em] uppercase px-4 py-2 transition-all hover:bg-background hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+                    className={cn(
+                      "group inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.14em] uppercase px-4 py-2 transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2",
+                      isHomeTop
+                        ? "border border-white/85 bg-white text-black hover:bg-white/90"
+                        : "border border-foreground bg-foreground text-background hover:bg-background hover:text-foreground"
+                    )}
                   >
                     Agendar diagnóstico
                     <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
@@ -212,7 +218,10 @@ export function Navigation({ pathname = "/" }: NavigationProps = {}) {
 
           {/* Mobile Toggle */}
           <button
-            className="lg:hidden p-2 -mr-2 text-foreground"
+            className={cn(
+              "lg:hidden p-2 -mr-2",
+              isHomeTop ? "text-white" : "text-foreground"
+            )}
             onClick={() => setIsOpen(!isOpen)}
             aria-label={isOpen ? "Cerrar menú" : "Abrir menú"}
             aria-expanded={isOpen}
