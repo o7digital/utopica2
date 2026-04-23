@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { HeroSlider } from '@/components/homepage/hero-slider';
 
 const title = 'Utópica — Consultoría de ventas B2B con IA | CDMX';
 const description =
@@ -82,48 +83,7 @@ const scheduleHref =
 
 <Layout title={title} description={description}>
   <div class="bg-[#f7f5f2] text-[#111111] transition-colors duration-300 dark:bg-[#0b0c0e] dark:text-white">
-    <section class="relative flex h-[80vh] items-center overflow-hidden pt-20" aria-labelledby="homepage-hero-title">
-      <div class="absolute inset-0">
-        <img
-          src="/images/utopica2.jpg"
-          alt="Equipo de negocio trabajando en una mesa"
-          class="h-full w-full object-cover"
-        />
-        <div class="absolute inset-0 bg-black/60"></div>
-      </div>
-
-      <div class="relative mx-auto w-full max-w-7xl px-6">
-        <div class="max-w-4xl">
-          <p class="mb-4 text-sm font-medium tracking-[0.18em] text-white/78">
-            Utópica · CDMX · Ventas B2B con IA
-          </p>
-          <h1 id="homepage-hero-title" class="text-5xl font-semibold leading-[0.95] text-white lg:text-6xl">
-            Tu calidad no se refleja en tus ventas.
-            <br />
-            Eso es una injusticia comercial.
-          </h1>
-          <p class="mt-6 text-lg text-white/80">
-            Instalamos sistemas comerciales que funcionan aunque nadie esté mirando — y escalan sin contratar más vendedores.
-          </p>
-          <div class="mt-8 flex flex-col gap-4 sm:flex-row">
-            <a
-              href={scheduleHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-black transition hover:bg-white/90"
-            >
-              Agendar diagnóstico
-            </a>
-            <a
-              href="#status-quo"
-              class="inline-flex items-center justify-center rounded-full border border-white/30 px-6 py-3 text-white transition hover:bg-white/10"
-            >
-              Cómo funciona
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
+    <HeroSlider client:load />
 
     <section id="status-quo" class="mx-auto max-w-7xl px-6 py-24" aria-labelledby="status-quo-title">
       <div class="max-w-3xl">
